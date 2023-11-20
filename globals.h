@@ -1,6 +1,5 @@
 #define spriteColour 128
 #define fontColour 251
-#define TWO_PI (PI * 2)
 
 long int lastMillis;
 long int fpsCount;

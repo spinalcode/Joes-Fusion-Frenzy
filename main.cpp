@@ -36,11 +36,11 @@ int main() {
     PD::load565Palette(background_Tiles_pal); // load main palette
 
     // sprites palette starts at 128
-    for(int t=0; t< sizeof(sprites_pal); t++){
+    for(int t=0; t< sizeof(sprites_pal)/sizeof(uint16_t); t++){
         PD::palette[t+128] = sprites_pal[t];
     }
     // font palette starts at 251
-    for(int t=0; t<sizeof(font_pal); t++){
+    for(int t=0; t<sizeof(font_pal)/sizeof(uint16_t); t++){
         PD::palette[t+fontColour] = font_pal[t];
     }
 

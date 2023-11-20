@@ -1,4 +1,4 @@
-#define NUM_BALLS 5
+#define NUM_BALLS 1
 #define DAMPING (0.7 * 256)
 #define GRAVITY (0.6 * 256)
 #define MOUSE_SIZE 5
@@ -6,14 +6,14 @@
 #define TWO_PI (3.14159 * 2)
 
 typedef struct {
-    int x, y;
-    int px, py;
-    int fx, fy;
-    int radius;
+    signed long int x, y;
+    signed long int px, py;
+    signed long int fx, fy;
+    signed long int radius;
 } Ball;
 
 Ball balls[NUM_BALLS];
-int mouseDown = 0;
+//int mouseDown = 0;
 int mouseX = 0;
 int mouseY = 0;
 int canvasWidth = 220 << 8;
@@ -30,8 +30,8 @@ void applyForce(Ball *ball, int delta) {
     ball->fx = ball->fy = 0;
     
     char tempText[64];
-    sprintf(tempText,"%d",delta);
-    myPrint(0,8,tempText);
+    sprintf(tempText,"%d",ball->y >> 8);
+    myPrint(110,8,tempText);
     
 }
 
@@ -162,7 +162,9 @@ void initBalls(){
         balls[i].y = (rand() % (canvasHeight>>8));
         balls[i].px = balls[i].x;
         balls[i].py = balls[i].y;
-        balls[i].radius = 64;//rand() % 20 + 10;
+        balls[i].radius = 13;//rand() % 20 + 10;
+        balls[i].fx = 0;
+        balls[i].fy = 0;
     }
 }
 

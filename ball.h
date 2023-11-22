@@ -1,4 +1,4 @@
-#define NUM_BALLS 5
+#define NUM_BALLS 10
 #define DAMPING 0.7
 #define GRAVITY 0.6
 #define MOUSE_SIZE 5
@@ -6,18 +6,20 @@
 #define TWO_PI (3.14159 * 2)
 
 typedef struct {
-    signed long int x, y;
-    signed long int px, py;
-    signed long int fx, fy;
-    signed long int radius;
+    float x, y;
+    float px, py;
+    float fx, fy;
+    float radius;
+    int frameNumber;
 } Ball;
 
 Ball balls[NUM_BALLS];
+int ballRad[] = {7,10,12,15,17,20,22,25,27,30,32,35};
 
 int canvasWidth = 220;
 int canvasHeight = 176;
 
-void applyForce(Ball *ball, int delta) {
+void applyForce(Ball *ball, float delta) {
     delta *= delta;
 
     ball->fy += GRAVITY;
@@ -28,7 +30,7 @@ void applyForce(Ball *ball, int delta) {
     ball->fx = ball->fy = 0;
     
     char tempText[64];
-    sprintf(tempText,"%d",ball->y >> 8);
+    sprintf(tempText,"%d",int(ball->y) >> 8);
     myPrint(110,8,tempText);
     
 }
@@ -46,7 +48,44 @@ void verlet(Ball *ball) {
 
 
 void drawBall(Ball *ball) {
-    drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_03, 128, 8);
+    switch(ball->frameNumber){
+        case 0:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_01, 128, 8);
+            break;
+        case 1:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_02, 128, 8);
+            break;
+        case 2:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_03, 128, 8);
+            break;
+        case 3:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_04, 128, 8);
+            break;
+        case 4:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_05, 128, 8);
+            break;
+        case 5:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_06, 128, 8);
+            break;
+        case 6:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_07, 128, 8);
+            break;
+        case 7:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_08, 128, 8);
+            break;
+        case 8:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_09, 128, 8);
+            break;
+        case 9:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_10, 128, 8);
+            break;
+        case 10:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_11, 128, 8);
+            break;
+        case 11:
+            drawSprite(ball->x - ball->radius, ball->y - ball->radius, joe_12, 128, 8);
+            break;
+    }
 }
 
 
@@ -156,14 +195,15 @@ void updateBalls() {
 
 void initBalls(){
     int i;
-    for (i = 0; i < NUM_BALLS; i++) {
+    for (i = 0; i < NUM_BALLS-1; i++) {
         balls[i].x = (rand() % canvasWidth);
         balls[i].y = (rand() % canvasHeight);
         balls[i].px = balls[i].x;
         balls[i].py = balls[i].y;
-        balls[i].radius = 13;//rand() % 20 + 10;
+        balls[i].radius = ballRad[i];//rand() % 20 + 10;
         balls[i].fx = 0;
         balls[i].fy = 0;
+        balls[i].frameNumber = i;
     }
 }
 

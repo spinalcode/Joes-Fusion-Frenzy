@@ -7,7 +7,7 @@
 
 #include "FixedPoints.h"
 #include "FixedPointsCommon.h"
-
+#include "buttonhandling.h"
 #include "fonts.h"
 #include "globals.h"
 #include "sprites.h"
@@ -17,6 +17,84 @@
 
 using PC = Pokitto::Core;
 using PD = Pokitto::Display;
+
+
+
+int cursor_x = 0;
+int currentBall = rand()%5;
+
+void playLevel(){
+
+    int bx = cursor_x;
+    int by = 48;
+
+    if(_Right_But[HELD]){
+        cursor_x++;
+    }    
+    if(_Left_But[HELD]){
+        cursor_x--;
+    }    
+
+    if(_A_But[NEW]){
+        balls[numBalls].x = bx+16;
+        balls[numBalls].y = by;
+        balls[numBalls].px = balls[numBalls].x;
+        balls[numBalls].py = balls[numBalls].y;
+        balls[numBalls].fx = 0;
+        balls[numBalls].fy = 0;
+        balls[numBalls].frameNumber = currentBall;
+        balls[numBalls].radius = ballRad[balls[numBalls].frameNumber];//rand() % 20 + 10;
+        numBalls++;
+        currentBall = rand()%5;
+    }    
+
+
+
+    switch(currentBall){
+        case 0:
+            drawSprite(bx, by, joe_01, 128, 8);
+            break;
+        case 1:
+            drawSprite(bx, by, joe_02, 128, 8);
+            break;
+        case 2:
+            drawSprite(bx, by, joe_03, 128, 8);
+            break;
+        case 3:
+            drawSprite(bx, by, joe_04, 128, 8);
+            break;
+        case 4:
+            drawSprite(bx, by, joe_05, 128, 8);
+            break;
+        case 5:
+            drawSprite(bx, by, joe_06, 128, 8);
+            break;
+        case 6:
+            drawSprite(bx, by, joe_07, 128, 8);
+            break;
+        case 7:
+            drawSprite(bx, by, joe_08, 128, 8);
+            break;
+        case 8:
+            drawSprite(bx, by, joe_09, 128, 8);
+            break;
+        case 9:
+            drawSprite(bx, by, joe_10, 128, 8);
+            break;
+        case 10:
+            drawSprite(bx, by, joe_11, 128, 8);
+            break;
+        case 11:
+            drawSprite(bx, by, joe_12, 128, 8);
+            break;
+    }
+
+    drawSprite(bx -16, by -52, hand1, 128, 8);
+
+    updateBalls();
+    
+}
+
 
 
 
@@ -50,52 +128,7 @@ int main() {
     PD::lineFillers[0] = myBGFiller8bit; // map layer
     PD::lineFillers[1] = mySpriteFiller8bit; // sprite layer
 
-
-    int scale[20];
-    int x[20];
-    int y[20];
-    int sd[20];
-    int ox[20];
-    int oy[20];
-    const uint8_t *imageData[20];
-    const uint8_t *maskData[20];
-
-    ox[0] = 8; oy[0] = 8;
-    ox[1] = 10; oy[1] = 10;
-    ox[2] = 13; oy[2] = 12;
-    ox[3] = 15; oy[3] = 14;
-    ox[4] = 18; oy[4] = 17;
-    ox[5] = 23; oy[5] = 24;
-    ox[6] = 24; oy[6] = 23;
-    ox[7] = 26; oy[7] = 25;
-    ox[8] = 29; oy[8] = 27;
-    ox[9] = 32; oy[9] = 31;
-    ox[10] = 34; oy[10] = 33;
-    ox[11] = 64; oy[11] = 66;
-
-
-    for(int t=0; t<5; t++){
-        scale[t] = 0;
-        x[t] = random(110);
-        y[t] = random(88);
-        sd[t] = random(1);
-        if(sd[t]==0)sd[t]=-1;
-    }
-    imageData[0] = joe_01;
-    imageData[1] = joe_02;
-    imageData[2] = joe_03;
-    imageData[3] = joe_04;
-    imageData[4] = joe_05;
-    imageData[5] = joe_06;
-    imageData[6] = joe_07;
-    imageData[7] = joe_08;
-    imageData[8] = joe_09;
-    imageData[9] = joe_10;
-    imageData[10] = joe_11;
-    imageData[11] = joe_12;
-
     long int lastMillis = PC::getTime();
-
 
     // play bgm
     //PS::playMusicStream(musicName);
@@ -114,6 +147,10 @@ int main() {
             continue;
         spriteCount = 0;
 
+        updateButtons();
+
+        playLevel();
+
         char tempText[64];
         sprintf(tempText,"FPS:%d",fpsCount);
         myPrint(0,0,tempText);
@@ -125,7 +162,6 @@ int main() {
             fpsCounter = 0;
         }
 
-        updateBalls();
 
 /*
     // Update music playing

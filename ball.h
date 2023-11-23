@@ -1,11 +1,11 @@
-#define NUM_BALLS 10
+#define MAX_BALLS 100
 #define DAMPING 0.9
 #define GRAVITY 0.8
 #define SPEED 1
 #define TWO_PI (3.14159 * 2)
 
 using Fract = SQ15x16;
-
+int numBalls = 0;
 
 typedef struct {
     Fract x, y;
@@ -15,7 +15,7 @@ typedef struct {
     int frameNumber;
 } Ball;
 
-Ball balls[NUM_BALLS];
+Ball balls[MAX_BALLS];
 int ballRad[] = {7,10,12,15,17,20,22,25,27,30,32,35};
 
 int canvasWidth = 220;
@@ -98,21 +98,33 @@ void resolveCollisions(int ip) {
     int i, n;
     Fract diff_x, diff_y, dist, real_dist, depth_x, depth_y;
     Ball *ball_1, *ball_2;
-    i = NUM_BALLS;
+    i = numBalls;
+
+    int ballChecked[numBalls];
+    for(int t=0; t<numBalls; t++){
+        ballChecked[t]=0;
+    }
 
     while (i--) {
         ball_1 = &balls[i];
 
-        n = NUM_BALLS;
+        n = numBalls;
 
         while (n--) {
             if (n == i)
+                continue;
+            
+            // if this ball has already checked its surrounding balls, don't do it again.
+            if(ballChecked[n])
                 continue;
 
             ball_2 = &balls[n];
 
             diff_x = ball_1->x - ball_2->x;
             diff_y = ball_1->y - ball_2->y;
+
+            if(diff_x > 35 || diff_y > 35)
+                continue;
 
             int length = static_cast<float>(diff_x * diff_x + diff_y * diff_y);
             dist = sqrt(int(length));
@@ -151,12 +163,13 @@ void resolveCollisions(int ip) {
                 }
             }
         }
+        ballChecked[i]=1;
     }
 }
 
 void check_walls() {
     int i;
-    for (i = 0; i < NUM_BALLS; i++) {
+    for (i = 0; i < numBalls; i++) {
         Ball *ball = &balls[i];
 
         if (ball->x < ball->radius) {
@@ -185,7 +198,7 @@ void updateBalls() {
     int i;
     int delta = 1;  // Change this value based on your desired time step
 
-    for (i = 0; i < NUM_BALLS; i++) {
+    for (i = 0; i < numBalls; i++) {
         Ball *ball = &balls[i];
 
         applyForce(ball, delta);
@@ -200,14 +213,14 @@ void updateBalls() {
 
 void initBalls(){
     int i;
-    for (i = 0; i < NUM_BALLS; i++) {
+    for (i = 0; i < numBalls; i++) {
         balls[i].x = (rand() % canvasWidth);
         balls[i].y = (rand() % canvasHeight);
         balls[i].px = balls[i].x;
         balls[i].py = balls[i].y;
         balls[i].fx = 0;
         balls[i].fy = 0;
-        balls[i].frameNumber = rand() % 5;
+        balls[i].frameNumber = rand() % 12;
         balls[i].radius = ballRad[balls[i].frameNumber];//rand() % 20 + 10;
     }
 }

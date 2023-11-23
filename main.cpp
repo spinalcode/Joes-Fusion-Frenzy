@@ -5,6 +5,8 @@
 #include <ADPCMSource.h>
 // ------- Audio stuff --------
 
+#include "FixedPoints.h"
+#include "FixedPointsCommon.h"
 
 #include "fonts.h"
 #include "globals.h"
@@ -106,33 +108,15 @@ int main() {
     Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
 
     initBalls();
-
+    
     while(PC::isRunning()){
         if( !PC::update() ) 
             continue;
         spriteCount = 0;
-/*
-        drawSprite(0, 32, imageData[0], 128, 8);
-        drawSprite(16, 32, imageData[1], 128, 8);
-        drawSprite(36, 32, imageData[2], 128, 8);
-        drawSprite(60, 32, imageData[3], 128, 8);
-        drawSprite(90, 32, imageData[4], 128, 8);
-        drawSprite(0, 64, imageData[5], 128, 8);
-        drawSprite(40, 64, imageData[6], 128, 8);
-        drawSprite(85, 64, imageData[7], 128, 8);
-        drawSprite(0, 100, imageData[8], 128, 8);
-        drawSprite(64, 100, imageData[9], 128, 8);
-        drawSprite(128, 100, imageData[10], 128, 8);
-        drawSprite(100, 100, imageData[11], 128, 8);
-
-        drawSprite(0, 8, full_pal, 0, 8);
-*/
 
         char tempText[64];
         sprintf(tempText,"FPS:%d",fpsCount);
         myPrint(0,0,tempText);
-
-//        drawSprite(110,88, joe_01, sprite_palette_pal, 8);
 
         fpsCounter++;
         if(PC::getTime() >= lastMillis+1000){

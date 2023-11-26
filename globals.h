@@ -22,8 +22,11 @@ struct SPRITE_DATA {
 int spriteCount = -1;
 uint8_t spriteLine[176];
 
-
-
+const uint8_t *spriteFrameData[] = {
+    joe_01,joe_02,joe_03,joe_04,joe_05,
+    joe_06,joe_07,joe_08,joe_09,joe_10,
+    joe_11,joe_12
+};
 
 // ------- Audio stuff --------
 char musicName[] = "22050_16bit_mono.pcm"; 

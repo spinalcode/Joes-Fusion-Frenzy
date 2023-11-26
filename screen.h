@@ -84,7 +84,8 @@ void mySpriteFiller8bit(std::uint8_t* line, std::uint32_t y, bool skip){
                         auto sl = &scanLine[sprite.x];
                         for(int x = sWidth - 1; x >= 0; x--){
                             auto pixel = si[x];
-                            if(pixel) sl[x] = paletteOffset + pixel;
+                            if(pixel) 
+                                sl[x] = paletteOffset + pixel;
                         }
                     } // if X
                 } // if Y

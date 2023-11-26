@@ -9,8 +9,8 @@
 #include "FixedPointsCommon.h"
 #include "buttonhandling.h"
 #include "fonts.h"
-#include "globals.h"
 #include "sprites.h"
+#include "globals.h"
 #include "ball.h"
 #include "background.h"
 #include "screen.h"
@@ -26,7 +26,7 @@ int currentBall = rand()%5;
 void playLevel(){
 
     int bx = cursor_x;
-    int by = 48;
+    int by = 24;
 
     if(_Right_But[HELD]){
         cursor_x++;
@@ -38,60 +38,24 @@ void playLevel(){
     if(_A_But[NEW]){
         balls[numBalls].x = bx+16;
         balls[numBalls].y = by;
-        balls[numBalls].px = balls[numBalls].x;
-        balls[numBalls].py = balls[numBalls].y;
+        balls[numBalls].px = bx+16;
+        balls[numBalls].py = by;
         balls[numBalls].fx = 0;
         balls[numBalls].fy = 0;
         balls[numBalls].frameNumber = currentBall;
-        balls[numBalls].radius = ballRad[balls[numBalls].frameNumber];//rand() % 20 + 10;
+        balls[numBalls].radius = ballRad[balls[numBalls].frameNumber];
         numBalls++;
-        currentBall = rand()%5;
+        currentBall = rand()%4;
+//        newBall(bx+16, by, currentBall);
     }    
 
 
-
-    switch(currentBall){
-        case 0:
-            drawSprite(bx, by, joe_01, 128, 8);
-            break;
-        case 1:
-            drawSprite(bx, by, joe_02, 128, 8);
-            break;
-        case 2:
-            drawSprite(bx, by, joe_03, 128, 8);
-            break;
-        case 3:
-            drawSprite(bx, by, joe_04, 128, 8);
-            break;
-        case 4:
-            drawSprite(bx, by, joe_05, 128, 8);
-            break;
-        case 5:
-            drawSprite(bx, by, joe_06, 128, 8);
-            break;
-        case 6:
-            drawSprite(bx, by, joe_07, 128, 8);
-            break;
-        case 7:
-            drawSprite(bx, by, joe_08, 128, 8);
-            break;
-        case 8:
-            drawSprite(bx, by, joe_09, 128, 8);
-            break;
-        case 9:
-            drawSprite(bx, by, joe_10, 128, 8);
-            break;
-        case 10:
-            drawSprite(bx, by, joe_11, 128, 8);
-            break;
-        case 11:
-            drawSprite(bx, by, joe_12, 128, 8);
-            break;
-    }
+    drawSprite(bx, by, spriteFrameData[currentBall], 128, 8);
 
     drawSprite(bx -16, by -52, hand1, 128, 8);
 
-    updateBalls();
+    //updateBalls(fpsCounter & 1);
+    updateBalls(1);
     
 }
 
@@ -138,9 +102,9 @@ int main() {
     };
 */
 
-    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
+//    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
 
-    initBalls();
+    //initBalls();
     
     while(PC::isRunning()){
         if( !PC::update() ) 
@@ -154,6 +118,8 @@ int main() {
         char tempText[64];
         sprintf(tempText,"FPS:%d",fpsCount);
         myPrint(0,0,tempText);
+        sprintf(tempText,"Joes:%d",numBalls);
+        myPrint(0,8,tempText);
 
         fpsCounter++;
         if(PC::getTime() >= lastMillis+1000){

@@ -42,7 +42,7 @@ void playLevel(){
         balls[numBalls].y = y;
         balls[numBalls].dx = (double)rand() / RAND_MAX * 10 - 5;
         balls[numBalls].dy = (double)rand() / RAND_MAX * 10 - 5;
-        balls[numBalls].r = 7;
+        balls[numBalls].r = ballRad[currentBall];
         balls[numBalls].frameNumber = currentBall;
         currentBall = rand()%4;
         numBalls++;

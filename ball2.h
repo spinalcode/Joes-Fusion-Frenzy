@@ -27,11 +27,11 @@ void update(Ball* ball) {
     ball->y += ball->dy;		    //	this.y += this.dy;	
     ball->dx += grav[0];		    //	this.dx += grav[0];	
     ball->dy -= grav[1];		    //	this.dy -= grav[1];	
-    if (ball->x > L+W - ball->r) {    //	if(this.x > W - this.r) {	
-        ball->x = L+W - ball->r;	    //		this.x = W - this.r;
+    if (ball->x > L + W + ball->r) {    //	if(this.x > W - this.r) {	
+        ball->x = L + W + ball->r;	    //		this.x = W - this.r;
         ball->dx *= -1; 		    //		this.dx *= -1;
-    } else if (ball->x < L+ball->r) {	//	} else if(this.x < this.r) {	
-        ball->x = L+ball->r;		    //		this.x = this.r;
+    } else if (ball->x < L + ball->r) {	//	} else if(this.x < this.r) {	
+        ball->x = L + ball->r;		    //		this.x = this.r;
         ball->dx *= -1;		        //		this.dx *= -1;
     }		                        //	}	
     if (ball->y > H - ball->r) {	//	if(this.y > H - this.r) {	

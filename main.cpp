@@ -9,16 +9,14 @@
 #include "FixedPointsCommon.h"
 #include "buttonhandling.h"
 #include "fonts.h"
-#include "sprites.h"
+#include "sprites2.h"
 #include "globals.h"
-#include "ball.h"
+#include "ball2.h"
 #include "background.h"
 #include "screen.h"
 
 using PC = Pokitto::Core;
 using PD = Pokitto::Display;
-
-
 
 int cursor_x = 0;
 int currentBall = rand()%5;
@@ -36,6 +34,21 @@ void playLevel(){
     }    
 
     if(_A_But[NEW]){
+
+        double x = (double)rand() / RAND_MAX * W;
+        double y = (double)rand() / RAND_MAX * H;
+        double r = (double)rand() / RAND_MAX * 20 + 10;
+        balls[numBalls].x = x;
+        balls[numBalls].y = y;
+        balls[numBalls].dx = (double)rand() / RAND_MAX * 10 - 5;
+        balls[numBalls].dy = (double)rand() / RAND_MAX * 10 - 5;
+        balls[numBalls].r = 7;
+        balls[numBalls].frameNumber = currentBall;
+        currentBall = rand()%4;
+        numBalls++;
+
+
+/*
         balls[numBalls].x = bx+16;
         balls[numBalls].y = by;
         balls[numBalls].px = bx+16;
@@ -44,18 +57,19 @@ void playLevel(){
         balls[numBalls].fy = 0;
         balls[numBalls].frameNumber = currentBall;
         balls[numBalls].radius = ballRad[balls[numBalls].frameNumber];
+        balls[numBalls].grav = ballGrav[currentBall];
         numBalls++;
         currentBall = rand()%4;
-//        newBall(bx+16, by, currentBall);
+*/
     }    
 
 
-    drawSprite(bx, by, spriteFrameData[currentBall], 128, 8);
+    drawSprite(bx, by, spriteFrameData[currentBall], spritePalData[currentBall], 8);
 
-    drawSprite(bx -16, by -52, hand1, 128, 8);
+    drawMaskedSprite(bx -16, 0, hand1, hand1_pal, hand1_mask, 8);
 
-    //updateBalls(fpsCounter & 1);
-    updateBalls(1);
+    //updateBalls(1);
+    updateBalls();
     
 }
 
@@ -77,32 +91,13 @@ int main() {
     PD::adjustCharStep = 0;
     PD::adjustLineStep = 0;
 
-    PD::load565Palette(background_Tiles_pal); // load main palette
-
-    // sprites palette starts at 128
-    for(int t=0; t< sizeof(sprites_pal)/sizeof(uint16_t); t++){
-        PD::palette[t+128] = sprites_pal[t];
-    }
-    // font palette starts at 251
-    for(int t=0; t<sizeof(font_pal)/sizeof(uint16_t); t++){
-        PD::palette[t+fontColour] = font_pal[t];
-    }
-
-
-    PD::lineFillers[0] = myBGFiller8bit; // map layer
-    PD::lineFillers[1] = mySpriteFiller8bit; // sprite layer
+    PD::lineFillers[0] = myBGFiller16bit; // map layer
+    PD::lineFillers[1] = mySpriteFiller16bit; // sprite layer
 
     long int lastMillis = PC::getTime();
 
     // play bgm
-    //PS::playMusicStream(musicName);
-/*
-    if(bgmFile.openRO(musicName)){
-        initTimer(22050);
-    };
-*/
-
-//    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
+    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
 
     //initBalls();
     
@@ -128,16 +123,6 @@ int main() {
             fpsCounter = 0;
         }
 
-
-/*
-    // Update music playing
-    if( currentBuffer != completeBuffer){
-        completeBuffer = currentBuffer;
-        if(!bgmFile.read(&audioBuffer[bufferOffset[completeBuffer]], audioBufferSize)){
-            // something
-        }
-    }
-*/
 
     }
     

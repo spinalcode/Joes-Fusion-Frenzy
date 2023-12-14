@@ -9,12 +9,12 @@
 //#define PROJ_HIGH_RAM HIGH_RAM_ON
 
 // Enabling these 2 optinos causes my code to crash on first compile but work on the second compile.
-#define PROJ_ENABLE_SOUND 1
-#define PROJ_FILE_STREAMING
-#define PROJ_STREAMING_MUSIC    1
+//#define PROJ_ENABLE_SOUND 1
+//#define PROJ_FILE_STREAMING
+//#define PROJ_STREAMING_MUSIC    1
 //#define PROJ_SOUND_BUFFERED     0
-#define PROJ_STREAM_TO_DAC      0
-#define PROJ_AUD_FREQ      22050
+//#define PROJ_STREAM_TO_DAC      0
+//#define PROJ_AUD_FREQ      22050
 
 
 #define PROJ_MAX_SPRITES 0
@@ -26,3 +26,4 @@
 //#define PROJ_LINE_FILLERS TAS::NOPFiller, TAS::SpriteFiller, TAS::NOPFiller, TAS::NOPFiller, TAS::NOPFiller
 #define PROJ_LINE_FILLERS TAS::NOPFiller, TAS::NOPFiller, TAS::NOPFiller, TAS::NOPFiller, TAS::NOPFiller
 
+//#define POK_EXT0_PWM_ENABLE 1

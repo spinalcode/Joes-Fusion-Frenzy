@@ -1,6 +1,6 @@
 #define MAX_BALLS 100
-#define DAMPING 0.05
-#define GRAVITY 0.8
+#define DAMPING 0.001
+#define GRAVITY 0.25
 #define SPEED 1
 #define TWO_PI (3.14159 * 2)
 
@@ -11,19 +11,21 @@ typedef struct {
     Fract x, y;
     Fract px, py;
     Fract fx, fy;
+    Fract grav;
     int radius;
-    int frameNumber;
+    uint8_t frameNumber;
 } Ball;
 
 Ball balls[MAX_BALLS];
-const uint8_t ballRad[] = {7,10,12,15,17,20,22,25,27,30,32,35};
+const uint8_t ballRad[] = {4,5,7,8,11,14,16,19,22,27,32};
+const Fract ballGrav[] = {0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11};
 
 uint8_t quad[4][MAX_BALLS];
 uint8_t qCount[4];
 
-uint8_t canvasLeft = 48;
-uint8_t canvasRight = 151;
-uint8_t canvasBottom = 160;
+#define canvasLeft 47
+#define canvasRight 152
+#define canvasBottom 162
 
 
 void newBall(int x, int y, int cb){
@@ -41,7 +43,7 @@ void newBall(int x, int y, int cb){
 inline void applyForce(Ball *ball, Fract delta) {
     //delta *= delta;
 
-    ball->fy += GRAVITY;
+    ball->fy += ball->grav;
 
     ball->x += ball->fx * delta;
     ball->y += ball->fy * delta;
@@ -51,7 +53,7 @@ inline void applyForce(Ball *ball, Fract delta) {
 
 inline void verlet(Ball *ball) {
     Fract nx = (ball->x * 2) - ball->px;
-    Fract ny = (ball->y * 2) - ball->py;
+    Fract ny = (ball->y * 3) - ball->py;
 
     ball->px = ball->x;
     ball->py = ball->y;
@@ -147,7 +149,7 @@ inline void resolveCollisions2(int ip) {
 
                 if(ball_1->radius == ball_2->radius){
 
-                    printf("b1=%d, b2=%d\n",i,n);
+                    //printf("b1=%d, b2=%d\n",i,n);
 
                     int tx1 = ball_1->x.getInteger();
                     int ty1 = ball_1->y.getInteger();
@@ -190,14 +192,15 @@ inline void resolveCollisions2(int ip) {
                     balls[numBalls].radius = ballRad[balls[numBalls].frameNumber];
                     numBalls++;
 
-                    continue;
+                    return;
+                    //continue;
                 }
                 if (ip) {
-/*                    
-                    int pr1 = DAMPING * (diff_x * vel_x1 + diff_y * vel_y1) / length;
-                    int pr2 = DAMPING * (diff_x * vel_x2 + diff_y * vel_y2) / length;
+                    
+                    Fract pr1 = DAMPING * (diff_x * vel_x1 + diff_y * vel_y1) / length;
+                    Fract pr2 = DAMPING * (diff_x * vel_x2 + diff_y * vel_y2) / length;
 
-                    vel_x1 += pr2 * diff_x - pr1 * diff_x;
+                    vel_x1 += (pr2 * diff_x - pr1 * diff_x)/2;
                     vel_x2 += pr1 * diff_x - pr2 * diff_x;
 
                     vel_y1 += pr2 * diff_y - pr1 * diff_y;
@@ -208,7 +211,7 @@ inline void resolveCollisions2(int ip) {
 
                     ball_2->px = ball_2->x - vel_x2;
                     ball_2->py = ball_2->y - vel_y2;
-*/
+
                 }
                 
             }
@@ -276,26 +279,28 @@ void updateBalls(bool frm) {
     int i;
     int delta = 1;  // Change this value based on your desired time step
 
-    for (i = 0; i < numBalls; i++) {
-        Ball *ball = &balls[i];
-        applyForce(ball, delta);
-        verlet(ball);
+    for(int s=0; s<3; s++){
+        for (i = 0; i < numBalls; i++) {
+            Ball *ball = &balls[i];
+            applyForce(ball, delta);
+            verlet(ball);
+        }
+    
+        resolveCollisions2(0);
+        check_walls();
+    
+        for (i = 0; i < numBalls; i++) {
+            Ball *ball = &balls[i];
+            verlet(ball);
+        }
+    
+        resolveCollisions2(1);
+        check_walls();
     }
-
-    resolveCollisions2(0);
-    check_walls();
-
+    
     for (i = 0; i < numBalls; i++) {
         Ball *ball = &balls[i];
-        verlet(ball);
-    }
-
-    resolveCollisions2(1);
-    check_walls();
-
-    for (i = 0; i < numBalls; i++) {
-        Ball *ball = &balls[i];
-        drawSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], 128, 8);
+        drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], spritePalData[ball->frameNumber],spriteMaskData[ball->frameNumber], 8);
     }
 }
 

@@ -11,7 +11,7 @@
 #include "fonts.h"
 #include "sprites2.h"
 #include "globals.h"
-#include "ball2.h"
+#include "ball.h"
 #include "background.h"
 #include "screen.h"
 
@@ -34,21 +34,18 @@ void playLevel(){
     }    
 
     if(_A_But[NEW]){
-
-        double x = (double)rand() / RAND_MAX * W;
-        double y = (double)rand() / RAND_MAX * H;
-        double r = (double)rand() / RAND_MAX * 20 + 10;
+/*
+        float x = (double)rand() / RAND_MAX * W + L;
+        float y = (double)rand() / RAND_MAX * H;
         balls[numBalls].x = x;
         balls[numBalls].y = y;
-        balls[numBalls].dx = (double)rand() / RAND_MAX * 10 - 5;
-        balls[numBalls].dy = (double)rand() / RAND_MAX * 10 - 5;
+        balls[numBalls].dx = 0;
+        balls[numBalls].dy = 0;
         balls[numBalls].r = ballRad[currentBall];
         balls[numBalls].frameNumber = currentBall;
-        currentBall = rand()%4;
+        currentBall = rand()%11;
         numBalls++;
-
-
-/*
+*/
         balls[numBalls].x = bx+16;
         balls[numBalls].y = by;
         balls[numBalls].px = bx+16;
@@ -56,11 +53,11 @@ void playLevel(){
         balls[numBalls].fx = 0;
         balls[numBalls].fy = 0;
         balls[numBalls].frameNumber = currentBall;
-        balls[numBalls].radius = ballRad[balls[numBalls].frameNumber];
-        balls[numBalls].grav = ballGrav[currentBall];
+        //balls[numBalls].r = ballRad[currentBall];
+        balls[numBalls].radius = ballRad[currentBall];
+        //balls[numBalls].grav = GRAVITY;//ballGrav[currentBall];
         numBalls++;
-        currentBall = rand()%4;
-*/
+        currentBall = rand()%4;        
     }    
 
 
@@ -68,9 +65,7 @@ void playLevel(){
 
     drawMaskedSprite(bx -16, 0, hand1, hand1_pal, hand1_mask, 8);
 
-    //updateBalls(1);
     updateBalls();
-    
 }
 
 
@@ -97,7 +92,7 @@ int main() {
     long int lastMillis = PC::getTime();
 
     // play bgm
-    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
+//    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
 
     //initBalls();
     

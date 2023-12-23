@@ -65,7 +65,7 @@ void playLevel(){
 
     drawMaskedSprite(bx -16, 0, hand1, hand1_pal, hand1_mask, 8);
 
-    updateBalls();
+    updateBalls(1);
 }
 
 

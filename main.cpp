@@ -27,45 +27,32 @@ void playLevel(){
     int by = 24;
 
     if(_Right_But[HELD]){
-        cursor_x++;
+        cursor_x+=(DELTA/2);
     }    
     if(_Left_But[HELD]){
-        cursor_x--;
+        cursor_x-=(DELTA/2);
     }    
 
     if(_A_But[NEW]){
-/*
-        float x = (double)rand() / RAND_MAX * W + L;
-        float y = (double)rand() / RAND_MAX * H;
-        balls[numBalls].x = x;
-        balls[numBalls].y = y;
-        balls[numBalls].dx = 0;
-        balls[numBalls].dy = 0;
-        balls[numBalls].r = ballRad[currentBall];
-        balls[numBalls].frameNumber = currentBall;
-        currentBall = rand()%11;
-        numBalls++;
-*/
-        balls[numBalls].x = bx+16;
+        balls[numBalls].x = bx;
         balls[numBalls].y = by;
-        balls[numBalls].px = bx+16;
+        balls[numBalls].px = bx;
         balls[numBalls].py = by;
         balls[numBalls].fx = 0;
         balls[numBalls].fy = 0;
         balls[numBalls].frameNumber = currentBall;
-        //balls[numBalls].r = ballRad[currentBall];
         balls[numBalls].radius = ballRad[currentBall];
-        //balls[numBalls].grav = GRAVITY;//ballGrav[currentBall];
         numBalls++;
         currentBall = rand()%4;        
     }    
 
 
-    drawSprite(bx, by, spriteFrameData[currentBall], spritePalData[currentBall], 8);
-
-    drawMaskedSprite(bx -16, 0, hand1, hand1_pal, hand1_mask, 8);
+    //drawMaskedSprite(bx -16, 0, hand1, hand1_pal, hand1_mask, 8);
+    drawMaskedSprite(bx - ballRad[currentBall], by - ballRad[currentBall], spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
 
     updateBalls(1);
+
+    keepAnimating();
 }
 
 
@@ -94,11 +81,15 @@ int main() {
     // play bgm
 //    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
 
-    //initBalls();
-    
+    while (_A_But[HELD]){
+        updateButtons();
+    }
+    numBalls = 0;
+
     while(PC::isRunning()){
         if( !PC::update() ) 
             continue;
+
         spriteCount = 0;
 
         updateButtons();
@@ -117,7 +108,6 @@ int main() {
             fpsCount = fpsCounter;
             fpsCounter = 0;
         }
-
 
     }
     

@@ -167,7 +167,7 @@ void startExplosion(int x, int y, uint8_t frameNumber){
     anims[curExplode].y = y;
     anims[curExplode].frameNumber = frameNumber;
     anims[curExplode].frame = 0;
-    animCount = 2;
+    animCount = 1;
     curExplode = 1-curExplode;
 }
 
@@ -185,7 +185,7 @@ void keepAnimating(){
         if(animCount==0){
             anims[0].frame++;
             anims[1].frame++;
-            animCount=2;
+            animCount=1;
         }
     }
 

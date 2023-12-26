@@ -46,12 +46,13 @@ void playLevel(){
         currentBall = rand()%4;        
     }    
 
-
     //drawMaskedSprite(bx -16, 0, hand1, hand1_pal, hand1_mask, 8);
     drawMaskedSprite(bx - ballRad[currentBall], by - ballRad[currentBall], spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
 
-    updateBalls(1);
-
+    for(int t=0; t<DELTA; t++){
+        updateBalls(1);
+    }
+    drawBalls();
     keepAnimating();
 }
 
@@ -79,7 +80,7 @@ int main() {
     long int lastMillis = PC::getTime();
 
     // play bgm
-//    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
+    Audio::ADPCMSource::play("22050_16bit_adpcm.wav")->setLoop(true);
 
     while (_A_But[HELD]){
         updateButtons();

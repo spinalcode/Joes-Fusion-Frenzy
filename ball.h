@@ -147,13 +147,20 @@ inline void check_walls() {
     }
 }
 
+void drawBalls(){
+    for (int i = 0; i < numBalls; i++) {
+        Ball *ball = &balls[i];
+        drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], spritePalData[ball->frameNumber],spriteMaskData[ball->frameNumber], 8);
+    }    
+}
+
 void updateBalls(bool frm) {
 
     if(stillAnimating==false){
 
         for (int i = 0; i < numBalls; i++) {
             Ball *ball = &balls[i];
-            applyForce(ball, DELTA);
+            applyForce(ball, 1);
             verlet(ball);
         }
     
@@ -164,14 +171,7 @@ void updateBalls(bool frm) {
             Ball *ball = &balls[i];
             verlet(ball);
         }
-    
         resolveCollisions(1);
         check_walls();
-
-    }
-
-    for (int i = 0; i < numBalls; i++) {
-        Ball *ball = &balls[i];
-        drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], spritePalData[ball->frameNumber],spriteMaskData[ball->frameNumber], 8);
     }
 }

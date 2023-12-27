@@ -30,14 +30,32 @@ inline void verlet(Ball* ball) {
     ball->y = ny;
 }
 
+void drawBalls(){
+    for (int i = 0; i < numBalls; i++) {
+        Ball *ball = &balls[i];
+        drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], spritePalData[ball->frameNumber],spriteMaskData[ball->frameNumber], 8);
+    }    
+}
+
+void drawBalls2(int i, int n){
+    for (int t = 0; t < numBalls; t++) {
+        Ball *ball = &balls[t];
+        if(i==t || n==t){
+            drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], greyscale_pal,spriteMaskData[ball->frameNumber], 8);
+        }else{
+            drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], spritePalData[ball->frameNumber],spriteMaskData[ball->frameNumber], 8);
+        }
+    }    
+}
+
 
 inline void resolveCollisions(int ip) {
     Fract diff_x, diff_y, dist, real_dist, depth_x, depth_y;
     Ball *ball_1, *ball_2;
 
-    for (int i = 1; i < numBalls; ++i) {
+    for (int i = 1; i < numBalls; i++) {
         ball_1 = &balls[i];
-        for (int n = 0; n < i; ++n) {
+        for (int n = 0; n < i; n++) {
             ball_2 = &balls[n];
 
             diff_x = ball_1->x - ball_2->x;
@@ -70,7 +88,23 @@ inline void resolveCollisions(int ip) {
             
                 if(ball_1->radius == ball_2->radius){
 
-                    //printf("b1=%d, b2=%d\n",i,n);
+                    printf("b1=%d, b2=%d, Num=%d\n",i,n, numBalls);
+                    spriteCount=0;
+                    drawBalls();
+                    int counter=0;
+                    while (!_B_But[HELD]){
+                        updateButtons();
+                        Pokitto::Core::update();
+                        spriteCount=0;
+                        if(++counter==2){
+                            drawBalls2(i,n);
+                            counter=0;
+                        }else{
+                            drawBalls();
+                        }
+                    }
+                    while (_B_But[HELD]){ updateButtons(); }
+
 
                     int tx1 = ball_1->x.getInteger();
                     int ty1 = ball_1->y.getInteger();
@@ -147,12 +181,7 @@ inline void check_walls() {
     }
 }
 
-void drawBalls(){
-    for (int i = 0; i < numBalls; i++) {
-        Ball *ball = &balls[i];
-        drawMaskedSprite(static_cast<float>(ball->x - ball->radius), static_cast<float>(ball->y - ball->radius), spriteFrameData[ball->frameNumber], spritePalData[ball->frameNumber],spriteMaskData[ball->frameNumber], 8);
-    }    
-}
+
 
 void updateBalls(bool frm) {
 

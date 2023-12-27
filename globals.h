@@ -191,7 +191,7 @@ void keepAnimating(){
 
     if(anims[0].frame==4 && stillAnimating==true){
         // create a new ball in their place
-        if(newBallX >=0){
+        if(newBallFrame < 11){
             balls[numBalls].x = newBallX;
             balls[numBalls].y = newBallY;
             balls[numBalls].px = newBallX;

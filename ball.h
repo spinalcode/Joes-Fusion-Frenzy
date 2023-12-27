@@ -86,69 +86,67 @@ inline void resolveCollisions(int ip) {
             ball_2->x += depth_x / 2;
             ball_2->y += depth_y / 2;
             
-                if(ball_1->radius == ball_2->radius){
+            if(ball_1->radius == ball_2->radius){
 
-                    printf("b1=%d, b2=%d, Num=%d\n",i,n, numBalls);
+                printf("b1=%d, b2=%d, Num=%d\n",i,n, numBalls);
+                spriteCount=0;
+                drawBalls();
+                int counter=0;
+                while (!_B_But[HELD]){
+                    updateButtons();
+                    Pokitto::Core::update();
                     spriteCount=0;
-                    drawBalls();
-                    int counter=0;
-                    while (!_B_But[HELD]){
-                        updateButtons();
-                        Pokitto::Core::update();
-                        spriteCount=0;
-                        if(++counter==2){
-                            drawBalls2(i,n);
-                            counter=0;
-                        }else{
-                            drawBalls();
-                        }
+                    if(++counter==2){
+                        drawBalls2(i,n);
+                        counter=0;
+                    }else{
+                        drawBalls();
                     }
-                    while (_B_But[HELD]){ updateButtons(); }
-
-
-                    int tx1 = ball_1->x.getInteger();
-                    int ty1 = ball_1->y.getInteger();
-                    int tfn = ball_1->frameNumber;
-                    int tx2 = ball_2->x.getInteger();
-                    int ty2 = ball_2->y.getInteger();
-
-                    startExplosion(static_cast<float>(ball_1->x - ball_1->radius), static_cast<float>(ball_1->y - ball_1->radius), ball_1->frameNumber);
-                    startExplosion(static_cast<float>(ball_2->x - ball_2->radius), static_cast<float>(ball_2->y - ball_2->radius), ball_2->frameNumber);
-
-                    // remove each ball by bumping everything up the queue
-                    for (int p = i; p < numBalls-1; p++) {
-                        balls[p].x = balls[p+1].x;
-                        balls[p].y = balls[p+1].y;
-                        balls[p].px = balls[p+1].px;
-                        balls[p].py = balls[p+1].py;
-                        balls[p].fx = balls[p+1].fx;
-                        balls[p].fy = balls[p+1].fy;
-                        balls[p].frameNumber = balls[p+1].frameNumber;
-                        balls[p].radius = balls[p+1].radius;
-                    }
-                    numBalls--;
-                    for (int p = n; p < numBalls-1; p++) {
-                        balls[p].x = balls[p+1].x;
-                        balls[p].y = balls[p+1].y;
-                        balls[p].px = balls[p+1].px;
-                        balls[p].py = balls[p+1].py;
-                        balls[p].fx = balls[p+1].fx;
-                        balls[p].fy = balls[p+1].fy;
-                        balls[p].frameNumber = balls[p+1].frameNumber;
-                        balls[p].radius = balls[p+1].radius;
-                    }
-                    numBalls--;
-
-                    newBallX = (tx1+tx2)/2;
-                    newBallY = (ty1+ty2)/2;
-                    newBallFrame = tfn+1;
-                    newBallRad = ballRad[newBallFrame];
-                    
-                    //continue;
-                    return;
                 }
-            
-            
+                while (_B_But[HELD]){ updateButtons(); }
+
+
+                int tx1 = ball_1->x.getInteger();
+                int ty1 = ball_1->y.getInteger();
+                int tfn = ball_1->frameNumber;
+                int tx2 = ball_2->x.getInteger();
+                int ty2 = ball_2->y.getInteger();
+
+                startExplosion(static_cast<float>(ball_1->x - ball_1->radius), static_cast<float>(ball_1->y - ball_1->radius), ball_1->frameNumber);
+                startExplosion(static_cast<float>(ball_2->x - ball_2->radius), static_cast<float>(ball_2->y - ball_2->radius), ball_2->frameNumber);
+
+                // remove each ball by bumping everything up the queue
+                for (int p = i; p < numBalls-1; p++) {
+                    balls[p].x = balls[p+1].x;
+                    balls[p].y = balls[p+1].y;
+                    balls[p].px = balls[p+1].px;
+                    balls[p].py = balls[p+1].py;
+                    balls[p].fx = balls[p+1].fx;
+                    balls[p].fy = balls[p+1].fy;
+                    balls[p].frameNumber = balls[p+1].frameNumber;
+                    balls[p].radius = balls[p+1].radius;
+                }
+                numBalls--;
+                for (int p = n; p < numBalls-1; p++) {
+                    balls[p].x = balls[p+1].x;
+                    balls[p].y = balls[p+1].y;
+                    balls[p].px = balls[p+1].px;
+                    balls[p].py = balls[p+1].py;
+                    balls[p].fx = balls[p+1].fx;
+                    balls[p].fy = balls[p+1].fy;
+                    balls[p].frameNumber = balls[p+1].frameNumber;
+                    balls[p].radius = balls[p+1].radius;
+                }
+                numBalls--;
+
+                newBallX = (tx1+tx2)/2;
+                newBallY = (ty1+ty2)/2;
+                newBallFrame = tfn+1;
+                newBallRad = ballRad[newBallFrame];
+                    
+                //continue;
+                return;
+            }
         }
     }
 }

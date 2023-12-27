@@ -174,15 +174,18 @@ void startExplosion(int x, int y, uint8_t frameNumber){
 void keepAnimating(){
 
     stillAnimating = false;
+    bool triggerAddBall = false;
     if(animCount > 0){
         for(int t=0; t<2; t++){
             if(anims[t].frame<4){
                 stillAnimating = true;
                 drawMaskedSprite(anims[t].x, anims[t].y, spriteFrameData[anims[t].frameNumber], spritePalData[anims[t].frameNumber], spriteBurstData[anims[t].frame + anims[t].frameNumber*4], 8);
+            }else{
+                triggerAddBall = true;
             }
         }
-        animCount--;
-        if(animCount==0){
+        if(animCount) animCount--;
+        if(animCount==0 && stillAnimating==true){
             anims[0].frame++;
             anims[1].frame++;
             animCount=1;
@@ -191,7 +194,7 @@ void keepAnimating(){
 
     if(anims[0].frame==4 && stillAnimating==true){
         // create a new ball in their place
-        if(newBallFrame < 11){
+        if(newBallFrame < 11 && newBallRad > 0){
             balls[numBalls].x = newBallX;
             balls[numBalls].y = newBallY;
             balls[numBalls].px = newBallX;
@@ -201,6 +204,7 @@ void keepAnimating(){
             balls[numBalls].frameNumber = newBallFrame;
             balls[numBalls].radius = newBallRad;
             numBalls++;
+            newBallRad = 0;
         }
     }
 

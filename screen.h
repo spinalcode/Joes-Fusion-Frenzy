@@ -87,6 +87,26 @@ void mySpriteFiller8bit(std::uint8_t* line, std::uint32_t y, bool skip){
                 } // if Y
             } // 2bpp
 
+            if(sprite.bit==4){
+                if((int)y >= sprite.y && (int)y < sprite.y + sprite.imageData[1]){
+                    if(sprite.x>=0 && sprite.x<PROJ_LCDWIDTH){
+                        int sWidth = sprite.imageData[0]/4;
+                        uint32_t so = 2+(sWidth * (y2-sprite.y));
+                        auto si = &sprite.imageData[so];
+                        auto sl = &scanLine[sprite.x];
+                        for(int x = sWidth-1; x>=0; x--){
+                            auto pixel = si[x];
+                            if(((pixel=*si)>>4)&15) *sl = paletteOffset + ((pixel>>4)&15);
+                            sl++;
+                            if(( pixel        )&15) *sl = paletteOffset + ((pixel   )&15);
+                            sl++;
+                            *si++;
+                        }
+                    } // if X
+                } // if Y
+            } // 4bpp
+
+
             if(sprite.bit==8){
                 if((int)y >= sprite.y && (int)y < sprite.y + sprite.imageData[1]){
                     if(sprite.x>=0 && sprite.x<PROJ_LCDWIDTH){
@@ -192,6 +212,27 @@ void mySpriteFiller16bit(std::uint8_t* line, std::uint32_t y, bool skip){
                     } // if X
                 } // if Y
             } // 2bpp
+
+            if(sprite.bit==4){
+                if((int)y >= sprite.y && (int)y < sprite.y + sprite.imageData[1]){
+                    if(sprite.x>=0 && sprite.x<PROJ_LCDWIDTH){
+                        int sWidth = sprite.imageData[0]/2;
+                        uint32_t so = 2+(sWidth * (y2-sprite.y));
+                        auto si = &sprite.imageData[so];
+                        auto pd = &sprite.paletteData[0];
+                        auto sl = &Pokitto::Display::palette[sprite.x];
+                        for(int x = sWidth-1; x>=0; x--){
+                            auto pixel = si[x];
+                            if(((pixel=*si)>>4)&15) *sl = pd[((pixel>>4)&15)];
+                            sl++;
+                            if(( pixel        )&15) *sl = pd[((pixel   )&15)];
+                            sl++;
+                            *si++;
+                        }
+                    } // if X
+                } // if Y
+            } // 4bpp
+
 
             if(sprite.bit==8){
                 if(y >= sprite.y && y < sprite.y + sprite.imageData[1]){

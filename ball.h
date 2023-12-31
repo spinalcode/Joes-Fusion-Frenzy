@@ -87,7 +87,7 @@ inline void resolveCollisions(int ip) {
             ball_2->y += depth_y / 2;
             
             if(ball_1->radius == ball_2->radius){
-
+/*
                 printf("b1=%d, b2=%d, Num=%d\n",i,n, numBalls);
                 spriteCount=0;
                 drawBalls();
@@ -104,7 +104,7 @@ inline void resolveCollisions(int ip) {
                     }
                 }
                 while (_B_But[HELD]){ updateButtons(); }
-
+*/
 
                 int tx1 = ball_1->x.getInteger();
                 int ty1 = ball_1->y.getInteger();
@@ -114,6 +114,9 @@ inline void resolveCollisions(int ip) {
 
                 startExplosion(static_cast<float>(ball_1->x - ball_1->radius), static_cast<float>(ball_1->y - ball_1->radius), ball_1->frameNumber);
                 startExplosion(static_cast<float>(ball_2->x - ball_2->radius), static_cast<float>(ball_2->y - ball_2->radius), ball_2->frameNumber);
+                
+                int number = random(4);
+                Pokitto::Sound::playSFX( sfx_pop[number], sfx_pop_size[number] );
 
                 // remove each ball by bumping everything up the queue
                 for (int p = i; p < numBalls-1; p++) {

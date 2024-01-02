@@ -68,7 +68,8 @@ void playLevel(){
         drawSprite(bx-8, by+claw_y, claw[(clawFrame*2)], claw_pal, 4);
     
         if(clawFrame == 3){
-            drawMaskedSprite(bx + 4 - ballRad[currentBall], by + clawLength, spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
+            //drawMaskedSprite(bx + 4 - ballRad[currentBall], by + clawLength, spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
+            drawMaskedSprite(bx + 4 - ballRad[currentBall], by+claw_y+(15-(ballRad[currentBall]*0.5)), spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
         }
         
         drawSprite(bx, by+claw_y,   claw[1+(clawFrame*2)], claw_pal, 4);
@@ -115,16 +116,22 @@ void playLevel(){
             
         }
 
+            // extinding claw arm
+            for(int t=4; t<claw_y-7; t+=8){
+                drawSprite(bx, by+t, claw[1], claw_pal, 4);
+            }
+            // claw arm joint
             drawSprite(bx, by, claw[0], claw_pal, 4);
+            // claw back
             drawSprite(bx-8, by+claw_y, claw[(clawFrame*2)], claw_pal, 4);
+            // current ball
             if(clawFrame == 3){
                 gotNextBall=true;
-                //printf("gotNextBall\n");
                 drawMaskedSprite(bx + 4 - ballRad[currentBall], by+claw_y+(15-(ballRad[currentBall]*0.5)), spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
-                
             }else{
                 drawMaskedSprite(174 - ballRad[currentBall], 64-(ballRad[currentBall]*2), spriteFrameData[currentBall], spritePalData[currentBall], spriteMaskData[currentBall], 8);
             }
+            // claw front
             drawSprite(bx, by+claw_y,   claw[1+(clawFrame*2)], claw_pal, 4);
 
 
@@ -181,8 +188,9 @@ int main() {
         char tempText[64];
         sprintf(tempText,"FPS:%d",fpsCount);
         myPrint(0,0,tempText);
-        sprintf(tempText,"Got:%d, Get:%d", gotNextBall, gettingNextBall);
-        myPrint(0,8,tempText);
+        
+        //sprintf(tempText,"Got:%d, Get:%d", gotNextBall, gettingNextBall);
+        //myPrint(0,8,tempText);
 
         fpsCounter++;
         if(PC::getTime() >= lastMillis+1000){
